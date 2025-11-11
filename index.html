@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tema IT</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<script>
+const snowContainer = document.querySelector('.snowflakes');
+
+function createSnowflake() {
+  const snowflake = document.createElement('div');
+  snowflake.classList.add('snowflake');
+  snowflake.textContent = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
+
+  // Dimensiune aleatorie
+  const size = Math.random() * 1.5 + 1; // între 1rem și 2.5rem
+  snowflake.style.fontSize = `${size}rem`;
+
+  // Poziție aleatorie
+  snowflake.style.left = `${Math.random() * 100}%`;
+
+  // Durată aleatorie
+  const duration = Math.random() * 5 + 5; // între 5s și 10s
+  snowflake.style.animationDuration = `${duration}s`;
+
+  // Adaugă și elimină după ce cade
+  snowContainer.appendChild(snowflake);
+  setTimeout(() => snowflake.remove(), duration * 1000);
+}
+
+// Creează fulgi la intervale regulate
+setInterval(createSnowflake, 500); // un fulg la fiecare 0.5 secunde
+</script>
+
+<body>
+    <!-- Meniu Lateral Telefon Modern -->
+    <nav class="phone-sidebar">
+        <button class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="phone-frame">
+            <div class="phone-header">
+                <div class="phone-notch"></div>
+                <div class="phone-time">18:27</div>
+            </div>
+            <div class="phone-content">
+                <ul class="menu">
+                    <li><a href="#home" class="menu-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Acasă</span>
+                    </a></li>
+                    <li><a href="#formular" class="menu-link">
+                        <i class="fas fa-edit"></i>
+                        <span>Formular</span>
+                    </a></li>
+                    <li><a href="#contact" class="menu-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact</span>
+                    </a></li>
+                    <li><a href="#despre" class="menu-link">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Despre</span>
+                    </a></li>
+                </ul>
+            </div>
+            <div class="phone-footer">
+                <div class="phone-buttons">
+                    <div class="phone-button"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content">
+        <!-- Secțiunea Acasă cu Countdown -->
+        <section id="home" class="hero-section">
+            <div class="animated-background">
+                <div class="lines">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+           
+            <div class="hero-content">
+                <div class="countdown-container">
+                    <h1 class="countdown-title">Merry Christmas!</h1>
+                    <div class="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="days">00</span>
+                            <span class="countdown-label">Zile</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="hours">00</span>
+                            <span class="countdown-label">Ore</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="minutes">00</span>
+                            <span class="countdown-label">Minute</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="seconds">00</span>
+                            <span class="countdown-label">Secunde</span>
+                        </div>
+                    </div>
+                    <p class="countdown-subtitle">Nu conteaza ca e noiembrie, vine Craciunul!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secțiunea Formular -->
+        <section id="formular" class="form-section">
+            <div class="form-container">
+                <h2>Formular </h2>
+                <form class="elegant-form" id="mainForm">
+                    <div class="form-group">
+                        <label for="nume">Numele tău:</label>
+                        <input type="text" id="nume" name="nume" placeholder="Introdu numele tău" class="form-input" autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Întrebare de baraj:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="caini" name="animale" value="caini" class="real-checkbox">
+                                <label for="caini" class="checkbox-label">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Câini</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="pisici" name="animale" value="pisici" class="real-checkbox">
+                                <label for="pisici" class="checkbox-label">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Pisici</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zodia">Zodia:</label>
+                        <input type="text" id="zodia" name="zodia" placeholder="Care este zodia ta?" class="form-input" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="kg">Câte kilograme are John?</label>
+                        <input type="number" id="kg" name="kg" placeholder="Introdu numărul" class="form-input" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ce pui prima dată?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="lapte" name="aliment" value="lapte" class="real-radio">
+                                <label for="lapte" class="radio-label">
+                                    <span class="radiomark"></span>
+                                    <span class="option-text">Laptele</span>
+                                </label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="cereale" name="aliment" value="cereale" class="real-radio">
+                                <label for="cereale" class="radio-label">
+                                    <span class="radiomark"></span>
+                                    <span class="option-text">Cerealele</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ce membru ești astăzi?</label>
+                        <div class="member-grid">
+                            <div class="member-option">
+                                <input type="radio" id="cos" name="membru" value="cos" class="real-radio">
+                                <label for="cos" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Coș</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="john" name="membru" value="john" class="real-radio">
+                                <label for="john" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">John</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="josan" name="membru" value="josan" class="real-radio">
+                                <label for="josan" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Josan</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="sebi" name="membru" value="sebi" class="real-radio">
+                                <label for="sebi" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Sebi</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="galis" name="membru" value="galis" class="real-radio">
+                                <label for="galis" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Galiș</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="iarina" name="membru" value="iarina" class="real-radio">
+                                <label for="iarina" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Iarina</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="member-option">
+                                <input type="radio" id="arina" name="membru" value="arina" class="real-radio">
+                                <label for="arina" class="member-label">
+                                    <span class="member-card">
+                                        <span class="member-name">Arina</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitButton">
+                        <span class="btn-text">Trimite Răspunsurile</span>
+                        <div class="btn-loader"></div>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Secțiunea Contact -->
+        <section id="contact" class="contact-section">
+            <div class="contact-container">
+                <h2>Contactează-ne</h2>
+                <p class="contact-subtitle">Follow, ma fac influencer :)) </p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=100010017721852&locale=ro_RO" target="_blank" class="social-link">
+                        <i class="fab fa-facebook-f"></i>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/panaitmara.67/" target="_blank" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    
+                    <a href="mailto: pmara2006@gmail.com" class="social-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secțiunea Despre -->
+        <section id="despre" class="about-section">
+            <div class="about-container">
+                <h2>Despre Proiect</h2>
+                <p class="about-text">proiect facut la plictiseala in loc sa invat la CPPL , sa se aprecieze efortul</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
