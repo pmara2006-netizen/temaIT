@@ -8,34 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<script>
-const snowContainer = document.querySelector('.snowflakes');
-
-function createSnowflake() {
-  const snowflake = document.createElement('div');
-  snowflake.classList.add('snowflake');
-  snowflake.textContent = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
-
-  // Dimensiune aleatorie
-  const size = Math.random() * 1.5 + 1; // între 1rem și 2.5rem
-  snowflake.style.fontSize = `${size}rem`;
-
-  // Poziție aleatorie
-  snowflake.style.left = `${Math.random() * 100}%`;   
-
-  // Durată aleatorie
-  const duration = Math.random() * 5 + 5; // între 5s și 10s
-  snowflake.style.animationDuration = `${duration}s`;
-
-  // Adaugă și elimină după ce cade
-  snowContainer.appendChild(snowflake);
-  setTimeout(() => snowflake.remove(), duration * 1000);
-}
-
-// Creează fulgi la intervale regulate
-setInterval(createSnowflake, 500); // un fulg la fiecare 0.5 secunde
-</script>
-
 <body>
     <!-- Meniu Lateral Telefon Modern -->
     <nav class="phone-sidebar">
@@ -67,6 +39,13 @@ setInterval(createSnowflake, 500); // un fulg la fiecare 0.5 secunde
                         <i class="fas fa-info-circle"></i>
                         <span>Despre</span>
                     </a></li>
+                    <li>
+                      <a href="#" class="menu-link pink-mode-btn" id="theme-toggle">
+                        <!-- Keep span empty; CSS ::before will set the correct emoji -->
+                        <span class="emoji-icon" aria-hidden="true"></span>
+                        <span id="theme-text">Pink Mode</span>
+                       </a>
+                     </li>
                 </ul>
             </div>
             <div class="phone-footer">
@@ -278,6 +257,161 @@ setInterval(createSnowflake, 500); // un fulg la fiecare 0.5 secunde
         </section>
     </main>
 
+    <!-- Safe container for snowflakes (optional) -->
+    <div class="snowflakes" aria-hidden="true"></div>
+
     <script src="script.js"></script>
+    <script>
+console.log('=== THEME DEBUG START ===');
+
+function updateCountdown() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    let christmas = new Date(currentYear, 11, 25);
+    if (now > christmas) christmas = new Date(currentYear + 1, 11, 25);
+
+    const diff = christmas - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const set = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value.toString().padStart(2, '0');
+    };
+
+    set('days', days);
+    set('hours', hours);
+    set('minutes', minutes);
+    set('seconds', seconds);
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const themeText = document.getElementById('theme-text');
+    if (!body) return;
+    const isPink = body.classList.contains('pink-mode');
+
+    if (isPink) {
+        body.classList.remove('pink-mode');
+        body.classList.add('dark-mode');
+        if (themeText) themeText.textContent = 'Pink Mode';
+        localStorage.setItem('theme', 'dark');
+        console.log('Switched to DARK MODE');
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('pink-mode');
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'pink');
+        console.log('Switched to PINK MODE');
+    }
+    console.log('Body classes:', body.className);
+}
+
+function initializeTheme() {
+    const saved = localStorage.getItem('theme');
+    const body = document.body;
+    const themeText = document.getElementById('theme-text');
+
+    if (saved === 'pink') {
+        body.classList.add('pink-mode');
+        body.classList.remove('dark-mode');
+        if (themeText) themeText.textContent = 'Dark Mode';
+    } else {
+        body.classList.remove('pink-mode');
+        body.classList.add('dark-mode');
+        if (themeText) themeText.textContent = 'Pink Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+    console.log('Theme initialized:', localStorage.getItem('theme'));
+}
+
+function setupEventListeners() {
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', e => { e.preventDefault(); toggleTheme(); });
+
+    // Menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const phoneSidebar = document.querySelector('.phone-sidebar');
+    if (menuToggle && phoneSidebar) {
+        menuToggle.addEventListener('click', () => phoneSidebar.classList.toggle('active'));
+    } else {
+        console.warn('menu-toggle or phone-sidebar not found');
+    }
+
+    // Navigation (links)
+    document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (window.innerWidth <= 768) {
+                const sb = document.querySelector('.phone-sidebar');
+                if (sb) sb.classList.remove('active');
+            }
+            document.querySelectorAll('.menu-link').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    // Form submit (keeps original behavior)
+    const mainForm = document.getElementById('mainForm');
+    if (mainForm) {
+        mainForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = mainForm.querySelector('.submit-btn');
+            if (submitBtn) { submitBtn.classList.add('loading'); submitBtn.disabled = true; }
+            setTimeout(() => {
+                const nume = document.getElementById('nume');
+                if (!nume || !nume.value.trim()) {
+                    alert('Te rog completează cel puțin numele tău!');
+                    if (submitBtn) { submitBtn.classList.remove('loading'); submitBtn.disabled = false; }
+                    return;
+                }
+                alert(`Mulțumim, ${nume.value}! Răspunsurile tale au fost înregistrate. 🎉`);
+                this.reset();
+                if (submitBtn) { submitBtn.classList.remove('loading'); submitBtn.disabled = false; }
+                document.querySelectorAll('.member-option, .radio-option').forEach(item => item.classList.remove('selected'));
+            }, 2000);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+    initializeTheme();
+    setupEventListeners();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Phone time
+    const updatePhoneTime = () => {
+        const now = new Date();
+        const phoneTime = document.querySelector('.phone-time');
+        if (phoneTime) phoneTime.textContent = now.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit', hour12: false });
+    };
+    updatePhoneTime();
+    setInterval(updatePhoneTime, 60000);
+});
+
+// Snowflakes (safe; appends to body)
+function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.textContent = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
+    snowflake.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+    snowflake.style.left = `${Math.random() * 100}%`;
+    snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    snowflake.addEventListener('animationend', () => snowflake.remove());
+    document.body.appendChild(snowflake);
+}
+setInterval(createSnowflake, 500);
+
+console.log('=== THEME DEBUG END ===');
+    </script>
 </body>
 </html>

@@ -1,302 +1,1327 @@
-// Countdown până la Crăciun
+// === THEME, COUNTDOWN, MENU, SNOW ===
+console.log('=== THEME DEBUG START ===');
+
 function updateCountdown() {
     const now = new Date();
     const currentYear = now.getFullYear();
-    let christmas = new Date(currentYear, 11, 25); // 25 Decembrie
-    
-    // Dacă Crăciunul a trecut deja anul acesta, targetează anul viitor
-    if (now > christmas) {
-        christmas = new Date(currentYear + 1, 11, 25);
-    }
-    
-    const timeDifference = christmas - now;
-    
-    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    
-    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-}
+    let christmas = new Date(currentYear, 11, 25);
+    if (now > christmas) christmas = new Date(currentYear + 1, 11, 25);
 
-// JavaScript pentru funcționalități
-document.addEventListener('DOMContentLoaded', function() {
-    // Toggle menu
-    const menuToggle = document.querySelector('.menu-toggle');
-    const phoneSidebar = document.querySelector('.phone-sidebar');
-    
-    menuToggle.addEventListener('click', function() {
-        phoneSidebar.classList.toggle('active');
-    });
+    const diff = christmas - now;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-    // Form submission
-    const registrationForm = document.getElementById('registrationForm');
-    const submitBtn = registrationForm.querySelector('.submit-btn');
-    
-    registrationForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Show loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        
-        // Simulate form submission
-        setTimeout(() => {
-            alert('Formularul a fost trimis cu succes!');
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            registrationForm.reset();
-        }, 2000);
-    });
-
-    // Countdown timer
-    function updateCountdown() {
-        const targetDate = new Date('2024-12-31T23:59:59').getTime();
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-});
-
-// Navigare între secțiuni
-document.querySelectorAll('.menu-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
-        
-        // Închide meniul pe mobile
-        if (window.innerWidth <= 768) {
-            document.querySelector('.phone-sidebar').classList.remove('active');
-        }
-        
-        // Actualizează meniul activ
-        document.querySelectorAll('.menu-link').forEach(item => {
-            item.classList.remove('active');
-        });
-        this.classList.add('active');
-        
-        // Scroll smooth către secțiune
-        targetSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    });
-});
-
-// Funcționalitate pentru checkbox și radio buttons
-document.querySelectorAll('.checkbox-option, .radio-option').forEach(option => {
-    option.addEventListener('click', function() {
-        const input = this.querySelector('input');
-        if (input.type === 'checkbox') {
-            input.checked = !input.checked;
-        } else if (input.type === 'radio') {
-            input.checked = true;
-            // Dezactivează toate celelalte radio buttons din același grup
-            const groupName = input.name;
-            document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
-                radio.closest('.radio-option').classList.remove('selected');
-            });
-            this.classList.add('selected');
-        }
-    });
-});
-
-// Funcționalitate pentru membri
-document.querySelectorAll('.member-option').forEach(option => {
-    option.addEventListener('click', function() {
-        const input = this.querySelector('input');
-        input.checked = true;
-        
-        // Dezactivează toate celelalte opțiuni
-        document.querySelectorAll('.member-option').forEach(item => {
-            item.classList.remove('selected');
-        });
-        this.classList.add('selected');
-    });
-});
-
-// Form submission
-
-document.getElementById('mainForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const mainForm = document.getElementById('mainForm');
-    const submitBtn = mainForm.querySelector('.submit-btn');
-
-    // Animatie de încărcare
-    submitBtn.classList.add('loading');
-    submitBtn.disabled = true;
-    
-    // Simulează procesarea datelor
-    setTimeout(() => {
-        // Verifică dacă numele a fost completat
-        const numeInput = document.getElementById('nume');
-        if (!numeInput.value.trim()) {
-            alert('Te rog completează cel puțin numele tău!');
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            return;
-        }
-        
-        // Mesaj de succes
-        alert(`Mulțumim, ${numeInput.value}! Răspunsurile tale au fost înregistrate. 🎉`);
-        
-        // Resetează formularul
-        this.reset();
-        
-        // Resetează butonul
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-        
-        // Resetează selecțiile vizuale
-        document.querySelectorAll('.member-option, .radio-option').forEach(item => {
-            item.classList.remove('selected');
-        });
-    }, 2000);
-});
-
-// Actualizează countdown-ul la fiecare secundă
-setInterval(updateCountdown, 1000);
-updateCountdown(); // Inițializează imediat
-
-// Efect de scris pentru textul "Despre"
-const aboutText = document.querySelector('.about-text');
-if (aboutText) {
-    const originalText = aboutText.textContent;
-    aboutText.textContent = '';
-    
-    let i = 0;
-    const typeWriter = () => {
-        if (i < originalText.length) {
-            aboutText.textContent += originalText.charAt(i);
-            i++;
-            setTimeout(typeWriter, 50);
-        }
+    const set = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value.toString().padStart(2, '0');
     };
-    
-    // Start typing effect when section is visible
-    const aboutObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                setTimeout(typeWriter, 500);
-                aboutObserver.unobserve(entry.target);
-            }
-        });
-    });
-    
-    aboutObserver.observe(aboutText);
+
+    set('days', days);
+    set('hours', hours);
+    set('minutes', minutes);
+    set('seconds', seconds);
 }
 
-// Animatie de fade in pentru elemente
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
+function toggleTheme() {
+    const body = document.body;
+    const themeText = document.getElementById('theme-text');
+    if (!body) return;
+    const isPink = body.classList.contains('pink-mode');
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
+    if (isPink) {
+        body.classList.remove('pink-mode');
+        body.classList.add('dark-mode');
+        if (themeText) themeText.textContent = 'Pink Mode';
+        localStorage.setItem('theme', 'dark');
+        console.log('Switched to DARK MODE');
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('pink-mode');
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'pink');
+        console.log('Switched to PINK MODE');
+    }
+    console.log('Body classes:', body.className);
+}
 
-// Observe form elements
-document.querySelectorAll('.form-group, .social-link, .countdown-item').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'all 0.6s ease';
-    observer.observe(el);
-});
+function initializeTheme() {
+    const saved = localStorage.getItem('theme');
+    const body = document.body;
+    const themeText = document.getElementById('theme-text');
 
-// Închide meniul când dai click în afara lui
-document.addEventListener('click', function(e) {
-    const phoneSidebar = document.querySelector('.phone-sidebar');
+    if (saved === 'pink') {
+        body.classList.add('pink-mode');
+        body.classList.remove('dark-mode');
+        if (themeText) themeText.textContent = 'Dark Mode';
+    } else {
+        body.classList.remove('pink-mode');
+        body.classList.add('dark-mode');
+        if (themeText) themeText.textContent = 'Pink Mode';
+        localStorage.setItem('theme', 'dark');
+    }
+    console.log('Theme initialized:', localStorage.getItem('theme'));
+}
+
+function setupEventListeners() {
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', e => { e.preventDefault(); toggleTheme(); });
+
+    // Menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
-    
-    if (phoneSidebar.classList.contains('active') && 
-        !phoneSidebar.contains(e.target) && 
-        !menuToggle.contains(e.target)) {
-        phoneSidebar.classList.remove('active');
+    const phoneSidebar = document.querySelector('.phone-sidebar');
+    if (menuToggle && phoneSidebar) {
+        menuToggle.addEventListener('click', () => phoneSidebar.classList.toggle('active'));
+    } else {
+        console.warn('menu-toggle or phone-sidebar not found');
     }
-});
 
-// Actualizează ora pe telefon
-function updatePhoneTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('ro-RO', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: false 
+    // Navigation (links)
+    document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (window.innerWidth <= 768) {
+                const sb = document.querySelector('.phone-sidebar');
+                if (sb) sb.classList.remove('active');
+            }
+            document.querySelectorAll('.menu-link').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
     });
-    
-    const phoneTime = document.querySelector('.phone-time');
-    if (phoneTime) {
-        phoneTime.textContent = timeString;
+
+    // Form submit (keeps original behavior)
+    const mainForm = document.getElementById('mainForm');
+    if (mainForm) {
+        mainForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = mainForm.querySelector('.submit-btn');
+            if (submitBtn) { submitBtn.classList.add('loading'); submitBtn.disabled = true; }
+            setTimeout(() => {
+                const nume = document.getElementById('nume');
+                if (!nume || !nume.value.trim()) {
+                    alert('Te rog completează cel puțin numele tău!');
+                    if (submitBtn) { submitBtn.classList.remove('loading'); submitBtn.disabled = false; }
+                    return;
+                }
+                alert(`Mulțumim, ${nume.value}! Răspunsurile tale au fost înregistrate. 🎉`);
+                this.reset();
+                if (submitBtn) { submitBtn.classList.remove('loading'); submitBtn.disabled = false; }
+                document.querySelectorAll('.member-option, .radio-option').forEach(item => item.classList.remove('selected'));
+            }, 2000);
+        });
     }
 }
 
-setInterval(updatePhoneTime, 60000);
-updatePhoneTime();
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded');
+    initializeTheme();
+    setupEventListeners();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-// Efect de hover pentru elementele interactive
-document.querySelectorAll('.menu-link, .social-link, .submit-btn').forEach(element => {
-    element.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
-    });
-    
-    element.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-    });
+    // Phone time
+    const updatePhoneTime = () => {
+        const now = new Date();
+        const phoneTime = document.querySelector('.phone-time');
+        if (phoneTime) phoneTime.textContent = now.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit', hour12: false });
+    };
+    updatePhoneTime();
+    setInterval(updatePhoneTime, 60000);
 });
 
-// Verifică dacă formularul este focusabil
-document.addEventListener('DOMContentLoaded', function() {
-    const inputs = document.querySelectorAll('input');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.style.borderColor = '#667eea';
-        });
-        
-        input.addEventListener('blur', function() {
-            this.style.borderColor = '#4a5568';
-        });
-    });
-});
-
+// Snowflakes (safe; appends to body)
 function createSnowflake() {
-  const snowflake = document.createElement('div');
-  snowflake.classList.add('snowflake');
-  snowflake.textContent = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
-
-  const size = Math.random() * 1.5 + 1;
-  snowflake.style.fontSize = `${size}rem`;
-  snowflake.style.left = `${Math.random() * 100}%`;
-  const duration = Math.random() * 5 + 5;
-  snowflake.style.animationDuration = `${duration}s`;
-
-  // Elimină fulgul când animația se termină
-  snowflake.addEventListener('animationend', () => {
-    snowflake.remove();
-  });
-
-  document.body.appendChild(snowflake); // vezi punctul 2
+    const snowflake = document.createElement('div');
+    snowflake.className = 'snowflake';
+    snowflake.textContent = ['❄', '❅', '❆'][Math.floor(Math.random() * 3)];
+    snowflake.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+    snowflake.style.left = `${Math.random() * 100}%`;
+    snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    snowflake.addEventListener('animationend', () => snowflake.remove());
+    document.body.appendChild(snowflake);
 }
 setInterval(createSnowflake, 500);
+
+console.log('=== THEME DEBUG END ===');
+// === VARIABILE PENTRU AMBELE TEME ===
+:root {
+    /* Dark Mode (implicit) */
+    --dark-bg: linear-gradient(135deg, #0a0a1a 0%, #0f1425 50%, #0a0a1a 100%);
+    --dark-text: #e0e0e0;
+    --dark-card-bg: rgba(26, 32, 44, 0.9);
+    --dark-card-border: rgba(255, 255, 255, 0.1);
+    --dark-accent: #667eea;
+    --dark-accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    
+    /* Pink Mode */
+    --pink-bg: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);
+    --pink-text: #8b004d;
+    --pink-card-bg: rgba(255, 255, 255, 0.8);
+    --pink-card-border: rgba(255, 255, 255, 0.3);
+    --pink-accent: #ff1493;
+    --pink-accent-gradient: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+}
+
+/* Base body using variables */
+body {
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    overflow-x: hidden;
+    transition: all 0.5s ease;
+}
+
+/* Meniu Lateral Telefon Modern */
+.phone-sidebar {
+    position: fixed;
+    right: -270px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 520px;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.phone-sidebar.active {
+    right: 30px;
+}
+
+.menu-toggle {
+    position: absolute;
+    left: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    z-index: 1001;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.phone-frame {
+    background: #111;
+    border-radius: 50px;
+    height: 600px;
+    width: 300px;
+    margin: auto;
+    box-shadow: inset 0 0 0 8px #000000, 0 20px 40px rgba(8, 11, 211, 0.336);
+    position: relative;
+    overflow: hidden;
+}
+
+.phone-notch {
+    width: 160px;
+    height: 30px;
+    background: #000000;
+    border-radius: 0 0 20px 20px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.phone-header {
+    height: 40px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.phone-time {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.phone-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.menu li {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.4s ease;
+}
+
+.phone-sidebar.active .menu li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.phone-sidebar.active .menu li:nth-child(1) { transition-delay: 0.1s; }
+.phone-sidebar.active .menu li:nth-child(2) { transition-delay: 0.2s; }
+.phone-sidebar.active .menu li:nth-child(3) { transition-delay: 0.3s; }
+.phone-sidebar.active .menu li:nth-child(4) { transition-delay: 0.4s; }
+
+.menu-link {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    background: rgba(74, 85, 104, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-link:hover,
+.menu-link.active {
+    background: rgba(90, 101, 120, 0.5);
+    transform: translateX(-5px);
+}
+
+.menu-link i {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.phone-footer {
+    height: 40px;
+    background: #0a0a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phone-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.phone-button {
+    width: 30px;
+    height: 4px;
+    background: #3a3f4f;
+    border-radius: 2px;
+}
+
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    pointer-events: none; 
+}
+
+.lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.1;
+}
+
+.line {
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #667eea, transparent);
+    animation: lineMove 8s linear infinite;
+}
+
+.line:nth-child(1) { animation-delay: 0s; }
+.line:nth-child(2) { animation-delay: 1s; }
+.line:nth-child(3) { animation-delay: 2s; }
+.line:nth-child(4) { animation-delay: 3s; }
+.line:nth-child(5) { animation-delay: 4s; }
+
+@keyframes lineMove {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* Content */
+.content {
+    width: 100%;
+    padding: 20px;
+    transition: margin-right 0.4s ease;
+}
+
+.phone-sidebar.active ~ .content {
+    margin-right: 300px;
+}
+
+/* Hero Section cu Countdown */
+.hero-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(5, 5, 15, 0.95) 0%, rgba(10, 15, 35, 0.95) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+}
+
+.countdown-container {
+    text-align: center;
+    background: rgba(15, 20, 35, 0.8);
+    padding: 50px 40px;
+    border-radius: 25px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(6, 0, 59, 0.651);
+    position: relative;
+    z-index: 3;
+}
+
+.countdown-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 2rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg, #e2e8f0 0%, #a0aec0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.countdown-number {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 15px;
+    min-width: 100px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    animation: pulse 2s infinite;
+    transition: all 0.3s ease;
+}
+
+.countdown-number:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+}
+
+.countdown-label {
+    font-size: 1rem;
+    color: #a0aec0;
+    margin-top: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.countdown-subtitle {
+    font-size: 1.5rem;
+    color: #cbd5e0;
+    font-weight: 400;
+    margin-top: 1.5rem;
+}
+
+/* Fulgi de zăpadă */
+.snowflake {
+  position: absolute;
+  top: -10px;
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.7;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Creează 20 de fulgi cu dimensiuni și poziții diferite */
+.snowflake:nth-child(1)  { left: 5%;  font-size: 1rem;  animation-duration: 10s; }
+.snowflake:nth-child(2)  { left: 10%; font-size: 2rem;  animation-duration: 12s; }
+.snowflake:nth-child(3)  { left: 15%; font-size: 1.5rem; animation-duration: 9s; }
+.snowflake:nth-child(4)  { left: 20%; font-size: 2.5rem; animation-duration: 11s; }
+.snowflake:nth-child(5)  { left: 25%; font-size: 1.2rem; animation-duration: 13s; }
+.snowflake:nth-child(6)  { left: 30%; font-size: 1.8rem; animation-duration: 10s; } 
+.snowflake:nth-child(7)  { left: 35%; font-size: 2.2rem; animation-duration: 14s; }
+.snowflake:nth-child(8)  { left: 40%; font-size: 1.4rem; animation-duration: 12s; }
+.snowflake:nth-child(9)  { left: 45%; font-size: 2.6rem; animation-duration: 15s; }
+.snowflake:nth-child(10) { left: 50%; font-size: 1.1rem; animation-duration: 9s; }
+.snowflake:nth-child(11) { left: 55%; font-size: 2.3rem; animation-duration: 13s; }
+.snowflake:nth-child(12) { left: 60%; font-size: 1.6rem; animation-duration: 11s; }
+.snowflake:nth-child(13) { left: 65%; font-size: 2.1rem; animation-duration: 10s; }
+.snowflake:nth-child(14) { left: 70%; font-size: 1.3rem; animation-duration: 12s; }
+.snowflake:nth-child(15) { left: 75%; font-size: 2.4rem; animation-duration: 14s; }
+.snowflake:nth-child(16) { left: 80%; font-size: 1.7rem; animation-duration: 11s; }
+.snowflake:nth-child(17) { left: 85%; font-size: 2.0rem; animation-duration: 13s; }
+.snowflake:nth-child(18) { left: 90%; font-size: 1.9rem; animation-duration: 10s; }
+.snowflake:nth-child(19) { left: 95%; font-size: 2.5rem; animation-duration: 15s; }
+.snowflake:nth-child(20) { left: 50%; font-size: 1.5rem; animation-duration: 12s; }
+
+/* Form Section */
+.form-section {
+    min-height: 100vh;
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0f1425 0%, #1a1f2e 100%);
+}
+
+.form-container {
+    background: rgba(26, 32, 44, 0.9);
+    padding: 50px 40px;
+    border-radius: 25px;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 700px;
+    width: 100%;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.elegant-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #cbd5e0;
+    font-size: 1.1rem;
+}
+
+/* Stiluri pentru formular funcțional */
+.form-input {
+    padding: 15px 18px;
+    border: 2px solid #4a5568;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #2d3748;
+    color: #e2e8f0;
+    font-family: 'Montserrat', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    transform: translateY(-2px);
+    background: #374151;
+}
+
+.form-input::placeholder {
+    color: #718096;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #cbd5e0;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Input-uri reale funcționale */
+.real-checkbox,
+.real-radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Container pentru checkbox și radio */
+.checkbox-option,
+.radio-option {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+/* Label-uri pentru checkbox și radio */
+.checkbox-label,
+.radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 15px 18px;
+    background: #2d3748;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #4a5568;
+    position: relative;
+    overflow: hidden;
+}
+
+.checkbox-label:hover,
+.radio-label:hover {
+    background: #374151;
+    transform: translateX(5px);
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Stiluri pentru checkmark și radiomark */
+.checkmark,
+.radiomark {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #718096;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    background: #2d3748;
+    flex-shrink: 0;
+}
+
+.checkmark {
+    border-radius: 5px;
+}
+
+.radiomark {
+    border-radius: 50%;
+}
+
+/* Stiluri pentru input-uri checked */
+.real-checkbox:checked + .checkbox-label .checkmark {
+    background: #667eea;
+    border-color: #667eea;
+}
+
+.real-checkbox:checked + .checkbox-label .checkmark::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.real-radio:checked + .radio-label .radiomark {
+    border-color: #667eea;
+}
+
+.real-radio:checked + .radio-label .radiomark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #667eea;
+    border-radius: 50%;
+}
+
+/* Stiluri pentru membri funcționali */
+.member-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.member-label {
+    display: block;
+    cursor: pointer;
+}
+
+.member-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background: #2d3748;
+    border: 2px solid #4a5568;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-align: center;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.member-label:hover .member-card {
+    background: #374151;
+    transform: translateY(-3px);
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.real-radio:checked + .member-label .member-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.member-name {
+    font-weight: 500;
+    font-size: 1rem;
+    z-index: 1;
+}
+
+/* Buton submit funcțional */
+.submit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 25px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-loader {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+.submit-btn.loading .btn-text {
+    display: none;
+}
+
+.submit-btn.loading .btn-loader {
+    display: block;
+}
+
+/* Grid pentru membri */
+.member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* Grupuri de checkbox și radio */
+.checkbox-group,
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Contact Section */
+.contact-section {
+    min-height: 70vh;
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1f2e 0%, #0f1425 100%);
+}
+
+.contact-container {
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+.contact-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.contact-subtitle {
+    font-size: 1.2rem;
+    color: #a0aec0;
+    margin-bottom: 40px;
+}
+
+.social-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px;
+    background: rgba(45, 55, 72, 0.7);
+    border: 2px solid #4a5568;
+    border-radius: 12px;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+}
+
+.social-link:hover::before {
+    left: 100%;
+}
+
+.social-link:hover {
+    background: rgba(55, 65, 81, 0.9);
+    transform: translateY(-3px);
+    border-color: #667eea;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    color: #ffffff;
+}
+
+.social-link i {
+    font-size: 1.3rem;
+    width: 25px;
+    text-align: center;
+}
+
+.social-link:nth-child(1):hover { border-color: #1877f2; box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3); }
+.social-link:nth-child(2):hover { border-color: #e4405f; box-shadow: 0 8px 20px rgba(228, 64, 95, 0.3); }
+.social-link:nth-child(3):hover { border-color: #1da1f2; box-shadow: 0 8px 20px rgba(29, 161, 242, 0.3); }
+
+/* About Section */
+.about-section {
+    min-height: 50vh;
+    padding: 80px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0a0a1a 0%, #0f1425 100%);
+    color: #e2e8f0;
+}
+
+.about-container {
+    text-align: center;
+    max-width: 800px;
+    background: rgba(26, 32, 44, 0.8);
+    padding: 50px 40px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+.about-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.about-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #cbd5e0;
+    font-style: italic;
+    background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+    }
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* === DARK MODE (IMPLICIT) === */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+/* === PINK MODE === */
+body.pink-mode {
+    background: var(--pink-bg);
+    color: var(--pink-text);
+}
+
+/* === STILURI BUTON COMATOR === */
+.theme-toggle-btn {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(74, 85, 104, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle-btn:hover {
+    transform: translateX(-5px);
+    background: rgba(90, 101, 120, 0.5);
+}
+
+.emoji-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Emoji for modes */
+body.dark-mode .emoji-icon::before {
+    content: "✮⋆˙";
+}
+body.pink-mode .emoji-icon::before {
+    content: "☾";
+}
+
+/* ===== PINK MODE - STILURI COMPLETE ===== */
+body.pink-mode {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%) !important;
+    color: #8b004d !important;
+}
+
+/* Phone Styles */
+body.pink-mode .phone-frame {
+    background: #ff69b4 !important;
+    box-shadow: inset 0 0 0 8px #ff1493, 0 20px 40px rgba(255, 20, 147, 0.3) !important;
+}
+
+body.pink-mode .phone-time {
+    color: #8b004d !important;
+}
+
+body.pink-mode .menu-link {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #8b004d !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.pink-mode .menu-link:hover,
+body.pink-mode .menu-link.active {
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: #ff0066 !important;
+}
+
+body.pink-mode .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.pink-mode .theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Hero Section */
+body.pink-mode .hero-section {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.95) 0%, rgba(255, 105, 180, 0.95) 100%) !important;
+}
+
+body.pink-mode .animated-background {
+    display: none !important;
+}
+
+body.pink-mode .countdown-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 25px 50px rgba(255, 20, 147, 0.3) !important;
+}
+
+body.pink-mode .countdown-title {
+    background: linear-gradient(135deg, #ff0066 0%, #ff69b4 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+body.pink-mode .countdown-number {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4) !important;
+    color: white !important;
+}
+
+body.pink-mode .countdown-label {
+    color: #8b004d !important;
+    font-weight: 600 !important;
+}
+
+body.pink-mode .countdown-subtitle {
+    color: #8b004d !important;
+    font-weight: 500 !important;
+}
+
+/* Form Section */
+body.pink-mode .form-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .form-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(255, 20, 147, 0.2) !important;
+}
+
+body.pink-mode .form-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .form-group label {
+    color: #8b004d !important;
+    font-weight: 600 !important;
+}
+
+body.pink-mode .form-input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #8b004d !important;
+    border: 2px solid #ff69b4 !important;
+}
+
+body.pink-mode .form-input:focus {
+    border-color: #ff1493 !important;
+    box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.2) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.pink-mode .form-input::placeholder {
+    color: #ff69b4 !important;
+    opacity: 0.7 !important;
+}
+
+/* Checkbox & Radio */
+body.pink-mode .checkbox-label,
+body.pink-mode .radio-label {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .checkbox-label:hover,
+body.pink-mode .radio-label:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-checkbox:checked + .checkbox-label .checkmark {
+    background: #ff1493 !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .radio-label .radiomark {
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .radio-label .radiomark::after {
+    background: #ff1493 !important;
+}
+
+/* Member Cards */
+body.pink-mode .member-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .member-label:hover .member-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .member-label .member-card {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    border-color: #ff1493 !important;
+    color: white !important;
+}
+
+/* Submit Button */
+body.pink-mode .submit-btn {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4) !important;
+}
+
+body.pink-mode .submit-btn:hover:not(:disabled) {
+    box-shadow: 0 15px 35px rgba(255, 20, 147, 0.6) !important;
+}
+
+/* Contact Section */
+body.pink-mode .contact-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .contact-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .contact-subtitle {
+    color: #8b004d !important;
+}
+
+body.pink-mode .social-link {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .social-link:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+/* About Section */
+body.pink-mode .about-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .about-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 25px 50px rgba(255, 20, 147, 0.2) !important;
+}
+
+body.pink-mode .about-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .about-text {
+    background: linear-gradient(135deg, #ff0066 0%, #ff69b4 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* Snowflakes in Pink Mode */
+body.pink-mode .snowflake {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5) !important;
+}
+
+/* Menu Toggle */
+body.pink-mode .menu-toggle {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4) !important;
+}
+
+/* Lines Animation */
+body.pink-mode .line {
+    background: linear-gradient(to bottom, transparent, #ff69b4, transparent) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .phone-sidebar {
+        width: 250px;
+        height: 480px;
+        right: -250px;
+    }
+    
+    .phone-sidebar.active {
+        right: 15px;
+    }
+    
+    .menu-toggle {
+        left: -45px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .phone-sidebar.active ~ .content {
+        margin-right: 0;
+    }
+    
+    .countdown-title {
+        font-size: 2.2rem;
+    }
+    
+    .countdown-number {
+        font-size: 2.5rem;
+        min-width: 80px;
+        padding: 15px;
+    }
+    
+    .countdown {
+        gap: 10px;
+    }
+    
+    .form-container {
+        padding: 30px 20px;
+    }
+    
+    .member-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .social-links {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-text {
+        font-size: 1.1rem;
+    }
+
+   /* Stiluri pentru butonul comutator */
+   .pink-mode-btn {
+       background: rgba(74, 85, 104, 0.3);
+       border: 1px solid rgba(255, 255, 255, 0.1);
+       position: relative;
+       overflow: hidden;
+   }
+
+   .pink-mode-btn:hover {
+       background: rgba(90, 101, 120, 0.5);
+       transform: translateX(-5px);
+   }
+
+   .emoji-icon {
+       font-size: 1.2rem;
+       margin-right: 8px;
+       transition: all 0.3s ease;
+   }
+}

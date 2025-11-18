@@ -4,12 +4,33 @@
     box-sizing: border-box;
 }
 
-body {
+/* === VARIABILE PENTRU AMBELE TEME === */
+:root {
+    /* Dark Mode (implicit) */
+    --dark-bg: linear-gradient(135deg, #0a0a1a 0%, #0f1425 50%, #0a0a1a 100%);
+    --dark-text: #e0e0e0;
+    --dark-card-bg: rgba(26, 32, 44, 0.9);
+    --dark-card-border: rgba(255, 255, 255, 0.1);
+    --dark-accent: #667eea;
+    --dark-accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    
+    /* Pink Mode */
+    --pink-bg: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%);
+    --pink-text: #8b004d;
+    --pink-card-bg: rgba(255, 255, 255, 0.8);
+    --pink-card-border: rgba(255, 255, 255, 0.3);
+    --pink-accent: #ff1493;
+    --pink-accent-gradient: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+}
+
+/* Base body using variables */
+    body {
     font-family: 'Montserrat', sans-serif;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0a0a1a 0%, #0f1425 50%, #0a0a1a 100%);
-    color: #e0e0e0;
+    background: var(--dark-bg);
+    color: var(--dark-text);
     overflow-x: hidden;
+    transition: all 0.5s ease;
 }
 
 /* Meniu Lateral Telefon Modern */
@@ -98,7 +119,6 @@ body {
     font-size: 14px;
     font-weight: 600;
 }
-
 
 .phone-content {
     flex: 1;
@@ -355,7 +375,6 @@ body {
 .snowflake:nth-child(18) { left: 90%; font-size: 1.9rem; animation-duration: 10s; }
 .snowflake:nth-child(19) { left: 95%; font-size: 2.5rem; animation-duration: 15s; }
 .snowflake:nth-child(20) { left: 50%; font-size: 1.5rem; animation-duration: 12s; }
-
 
 /* Form Section */
 .form-section {
@@ -742,9 +761,6 @@ body {
 .social-link:nth-child(1):hover { border-color: #1877f2; box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3); }
 .social-link:nth-child(2):hover { border-color: #e4405f; box-shadow: 0 8px 20px rgba(228, 64, 95, 0.3); }
 .social-link:nth-child(3):hover { border-color: #1da1f2; box-shadow: 0 8px 20px rgba(29, 161, 242, 0.3); }
-.social-link:nth-child(4):hover { border-color: #333; box-shadow: 0 8px 20px rgba(51, 51, 51, 0.3); }
-.social-link:nth-child(5):hover { border-color: #0077b5; box-shadow: 0 8px 20px rgba(0, 119, 181, 0.3); }
-.social-link:nth-child(6):hover { border-color: #ea4335; box-shadow: 0 8px 20px rgba(234, 67, 53, 0.3); }
 
 /* About Section */
 .about-section {
@@ -820,11 +836,279 @@ body {
   }
 }
 
-
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* === DARK MODE (IMPLICIT) === */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+/* === PINK MODE === */
+body.pink-mode {
+    background: var(--pink-bg);
+    color: var(--pink-text);
+}
+
+/* === STILURI BUTON COMATOR === */
+.theme-toggle-btn {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(74, 85, 104, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle-btn:hover {
+    transform: translateX(-5px);
+    background: rgba(90, 101, 120, 0.5);
+}
+
+.emoji-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Emoji for modes */
+body.dark-mode .emoji-icon::before {
+    content: "✮⋆˙";
+}
+body.pink-mode .emoji-icon::before {
+    content: "☾";
+}
+
+/* ===== PINK MODE - STILURI COMPLETE ===== */
+body.pink-mode {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 50%, #ff1493 100%) !important;
+    color: #8b004d !important;
+}
+
+/* Phone Styles */
+body.pink-mode .phone-frame {
+    background: #ff69b4 !important;
+    box-shadow: inset 0 0 0 8px #ff1493, 0 20px 40px rgba(255, 20, 147, 0.3) !important;
+}
+
+body.pink-mode .phone-time {
+    color: #8b004d !important;
+}
+
+body.pink-mode .menu-link {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #8b004d !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.pink-mode .menu-link:hover,
+body.pink-mode .menu-link.active {
+    background: rgba(255, 255, 255, 0.5) !important;
+    color: #ff0066 !important;
+}
+
+body.pink-mode .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+body.pink-mode .theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Hero Section */
+body.pink-mode .hero-section {
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.95) 0%, rgba(255, 105, 180, 0.95) 100%) !important;
+}
+
+body.pink-mode .animated-background {
+    display: none !important;
+}
+
+body.pink-mode .countdown-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 25px 50px rgba(255, 20, 147, 0.3) !important;
+}
+
+body.pink-mode .countdown-title {
+    background: linear-gradient(135deg, #ff0066 0%, #ff69b4 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+body.pink-mode .countdown-number {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4) !important;
+    color: white !important;
+}
+
+body.pink-mode .countdown-label {
+    color: #8b004d !important;
+    font-weight: 600 !important;
+}
+
+body.pink-mode .countdown-subtitle {
+    color: #8b004d !important;
+    font-weight: 500 !important;
+}
+
+/* Form Section */
+body.pink-mode .form-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .form-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(255, 20, 147, 0.2) !important;
+}
+
+body.pink-mode .form-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .form-group label {
+    color: #8b004d !important;
+    font-weight: 600 !important;
+}
+
+body.pink-mode .form-input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    color: #8b004d !important;
+    border: 2px solid #ff69b4 !important;
+}
+
+body.pink-mode .form-input:focus {
+    border-color: #ff1493 !important;
+    box-shadow: 0 0 0 3px rgba(255, 20, 147, 0.2) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.pink-mode .form-input::placeholder {
+    color: #ff69b4 !important;
+    opacity: 0.7 !important;
+}
+
+/* Checkbox & Radio */
+body.pink-mode .checkbox-label,
+body.pink-mode .radio-label {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .checkbox-label:hover,
+body.pink-mode .radio-label:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-checkbox:checked + .checkbox-label .checkmark {
+    background: #ff1493 !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .radio-label .radiomark {
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .radio-label .radiomark::after {
+    background: #ff1493 !important;
+}
+
+/* Member Cards */
+body.pink-mode .member-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .member-label:hover .member-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+body.pink-mode .real-radio:checked + .member-label .member-card {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    border-color: #ff1493 !important;
+    color: white !important;
+}
+
+/* Submit Button */
+body.pink-mode .submit-btn {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4) !important;
+}
+
+body.pink-mode .submit-btn:hover:not(:disabled) {
+    box-shadow: 0 15px 35px rgba(255, 20, 147, 0.6) !important;
+}
+
+/* Contact Section */
+body.pink-mode .contact-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .contact-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .contact-subtitle {
+    color: #8b004d !important;
+}
+
+body.pink-mode .social-link {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid #ff69b4 !important;
+    color: #8b004d !important;
+}
+
+body.pink-mode .social-link:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ff1493 !important;
+}
+
+/* About Section */
+body.pink-mode .about-section {
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%) !important;
+}
+
+body.pink-mode .about-container {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 25px 50px rgba(255, 20, 147, 0.2) !important;
+}
+
+body.pink-mode .about-container h2 {
+    color: #ff0066 !important;
+}
+
+body.pink-mode .about-text {
+    background: linear-gradient(135deg, #ff0066 0%, #ff69b4 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* Snowflakes in Pink Mode */
+body.pink-mode .snowflake {
+    color: rgba(255, 255, 255, 0.8) !important;
+    text-shadow: 0 0 10px rgba(255, 20, 147, 0.5) !important;
+}
+
+/* Menu Toggle */
+body.pink-mode .menu-toggle {
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4) !important;
+}
+
+/* Lines Animation */
+body.pink-mode .line {
+    background: linear-gradient(to bottom, transparent, #ff69b4, transparent) !important;
 }
 
 /* Responsive */
@@ -878,4 +1162,23 @@ body {
     .about-text {
         font-size: 1.1rem;
     }
+
+   /* Stiluri pentru butonul comutator */
+   .pink-mode-btn {
+       background: rgba(74, 85, 104, 0.3);
+       border: 1px solid rgba(255, 255, 255, 0.1);
+       position: relative;
+       overflow: hidden;
+   }
+
+   .pink-mode-btn:hover {
+       background: rgba(90, 101, 120, 0.5);
+       transform: translateX(-5px);
+   }
+
+   .emoji-icon {
+       font-size: 1.2rem;
+       margin-right: 8px;
+       transition: all 0.3s ease;
+   }
 }
