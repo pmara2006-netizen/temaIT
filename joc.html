@@ -1,0 +1,330 @@
+﻿<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Joc Puzzle — Tema IT</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{
+      --bg:#0f0f12;
+      --panel:#111217;
+      --accent:#ff77aa;
+      --size:120px;
+      --gap:8px;
+      --wrap-gap:20px;
+    }
+    html,body{height:100%;margin:0;}
+    body{
+      font-family: Montserrat, system-ui, sans-serif;
+      background: radial-gradient(circle at top left, #1a1a1d, #0f0f12);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      box-sizing:border-box;
+    }
+    .wrap{
+      display:flex;
+      gap:var(--wrap-gap);
+      align-items:flex-start;
+      width:min(1100px, 100%);
+      padding:18px;
+      border-radius:16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .left { flex: 0 0 auto; }
+    .right { flex: 1 1 360px; min-width:260px; display:flex; flex-direction:column; gap:12px; }
+    h1{margin:0 0 6px;font-size:22px;font-weight:700}
+    p.hint{margin:0 0 8px; color:#cfcfd3; max-width:420px}
+
+    /* Board */
+    .board-frame{
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;border-radius:16px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .board{
+      width:calc(var(--size) * 3 + var(--gap)*2);
+      height:calc(var(--size) * 3 + var(--gap)*2);
+      display:grid;
+      grid-template-columns: repeat(3, var(--size));
+      grid-template-rows: repeat(3, var(--size));
+      gap:var(--gap);
+      border:3px solid rgba(255,255,255,0.08);
+      padding:10px;border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+    }
+
+    /* Celule */
+    .cell{
+      background: rgba(255,255,255,0.08);
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .2s, box-shadow .2s;
+      overflow:hidden;
+    }
+    /* scoatem glow-ul roz la hover */
+    .cell:hover { transform: scale(1.04); }
+
+    /* corect = verde */
+    .cell.success {
+      box-shadow: 0 0 18px 6px rgba(46, 204, 113, 0.6);
+      animation: pulse .9s ease;
+    }
+    /* greșit = roșu */
+    .cell.incorrect {
+      box-shadow: 0 0 12px 4px rgba(231, 76, 60, 0.7);
+    }
+    @keyframes pulse { 0%{ transform:scale(1) } 50%{ transform:scale(1.02) } 100%{ transform:scale(1) } }
+
+    /* Pieces */
+    .pieces{
+      width:calc(var(--size)*3 + var(--gap)*2);
+      display:grid;
+      grid-template-columns:repeat(3,var(--size));
+      grid-auto-rows:var(--size);
+      gap:var(--gap);
+      padding:8px;
+      background:rgba(255,255,255,0.06);
+      border-radius:12px;
+    }
+    .piece{
+      width:var(--size);
+      height:var(--size);
+      border-radius:10px;
+      background-repeat:no-repeat;
+      background-size:calc(var(--size)*3) calc(var(--size)*3);
+      cursor:grab;
+      box-shadow:0 6px 16px rgba(0,0,0,0.5);
+      transition: transform .2s, box-shadow .2s;
+      user-select:none;
+      touch-action:none;
+    }
+    .piece:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(255,119,170,0.5)}
+    .piece.dragging{ opacity:.6; transform:scale(.95); cursor:grabbing; }
+
+    /* Buttons */
+    .btn{
+      background:linear-gradient(135deg,#ff77aa,#ff4d88);
+      border:none;
+      padding:10px 16px;
+      border-radius:10px;
+      color:#fff;
+      font-weight:600;
+      cursor:pointer;
+      transition:.25s;
+      box-shadow:0 4px 12px rgba(255,77,136,0.4);
+      display:inline-flex;
+      align-items:center;
+      gap:8px
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,77,136,0.6);background:linear-gradient(135deg,#ff4d88,#ff77aa)}
+
+    /* Responsive */
+    @media (max-width:920px){
+      .wrap{ flex-direction:column; align-items:center; padding:12px; }
+      .right{ width:100%; }
+      .pieces{ grid-template-columns: repeat(3, minmax(0,1fr)); width:100%; grid-auto-rows: auto; }
+      .piece{ width:100%; aspect-ratio:1/1; background-size: cover; }
+    }
+    @media (max-width:480px){
+      :root{ --size:86px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="dropWrap">
+    <div class="left">
+      <h1>Joc Puzzle — Aranjează poza (3×3)</h1>
+      <p class="hint">Trage piese în casete. Verde = corect, roșu = greșit.</p>
+      <div class="board-frame">
+        <div id="board" class="board"></div>
+      </div>
+    </div>
+    <aside class="right">
+      <div class="sidebar-top">
+        <div class="meta"><strong>Piese</strong><span style="color:#9a9aa0">3×3</span></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="btn">
+            <i class="fas fa-image"></i> Schimbă imaginea
+            <input id="imageInput" type="file" accept="image/*" style="display:none">
+          </label>
+          <button id="shuffleBtn" class="btn">Amestecă</button>
+        </div>
+      </div>
+      <div id="pieces" class="pieces"></div>
+      <div class="controls">
+        <button id="resetBtn" class="btn">Reset</button>
+      </div>
+      <p class="hint">Poți trage o imagine din calculator peste zona puzzle sau folosi butonul.</p>
+    </aside>
+  </div>
+
+<script>
+(function(){
+  const IMAGE_URL = 'it.png'; // imaginea implicită
+  const SIZE = 3;
+  const board = document.getElementById('board');
+  const piecesContainer = document.getElementById('pieces');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const imageInput = document.getElementById('imageInput');
+  const dropWrap = document.getElementById('dropWrap');
+
+  let imageUrl = IMAGE_URL;
+  let currentOrder = [];
+  let lockedTargets = new Set();
+
+  function build() {
+    board.innerHTML = '';
+    piecesContainer.innerHTML = '';
+    lockedTargets.clear();
+    // creează celulele
+    for (let i = 0; i < SIZE*SIZE; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.dataset.index = i;
+      cell.addEventListener('dragover', e=>e.preventDefault());
+      cell.addEventListener('drop', onDrop);
+      board.appendChild(cell);
+    }
+    // ordinea și piesele
+    currentOrder = [...Array(SIZE*SIZE).keys()];
+    shufflePieces();
+    renderPieces();
+  }
+
+  function renderPieces() {
+    piecesContainer.innerHTML = '';
+    currentOrder.forEach(idx => {
+      const piece = document.createElement('div');
+      piece.className = 'piece';
+      piece.draggable = true;
+      piece.dataset.index = idx;
+      const row = Math.floor(idx / SIZE);
+      const col = idx % SIZE;
+      piece.style.backgroundImage = `url("${imageUrl}")`;
+      piece.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+      piece.style.backgroundSize = `${SIZE * 100}% ${SIZE * 100}%`;
+      piece.addEventListener('dragstart', e=>{
+        try { e.dataTransfer.setData('text/plain', idx); } catch(_){}
+        piece.classList.add('dragging');
+        // dacă piesa vine dintr-un cell, curățăm glow-ul de acolo
+        const parentCell = piece.parentElement;
+        if (parentCell && parentCell.classList.contains('cell')) {
+          parentCell.classList.remove('incorrect','success');
+        }
+      });
+      piece.addEventListener('dragend', ()=> piece.classList.remove('dragging'));
+      piecesContainer.appendChild(piece);
+    });
+  }
+
+  function shufflePieces() {
+    for (let i = currentOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [currentOrder[i], currentOrder[j]] = [currentOrder[j], currentOrder[i]];
+    }
+  }
+
+  function onDrop(e){
+  e.preventDefault();
+  const cell = e.currentTarget;
+  const pieceIndex = e.dataTransfer.getData('text/plain');
+  const piece = document.querySelector('.piece[data-index="'+pieceIndex+'"]');
+  if (!piece) return;
+
+  // curățăm glow-ul din celula anterioară
+  const prevCell = piece.parentElement;
+  if (prevCell && prevCell.classList.contains('cell')) {
+    prevCell.classList.remove('incorrect','success');
+  }
+
+  // dacă există deja o piesă în celulă, o trimitem înapoi în container
+  const existing = cell.querySelector('.piece');
+  if (existing && existing !== piece) {
+    piecesContainer.appendChild(existing);
+    existing.draggable = true;
+    cell.classList.remove('incorrect','success');
+  }
+
+  // mutăm piesa în această celulă
+  cell.appendChild(piece);
+
+  const targetIndex = Number(cell.dataset.index);
+  const correctIndex = Number(piece.dataset.index);
+
+  if (targetIndex === correctIndex){
+    cell.classList.remove('incorrect');
+    cell.classList.add('success');
+    setTimeout(()=>cell.classList.remove('success'), 2000);
+  } else {
+    cell.classList.remove('success');
+    cell.classList.add('incorrect');
+  }
+}
+
+
+  // schimbă imaginea din input
+  imageInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Te rog selectează un fișier imagine (jpg/png/webp).');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      imageUrl = reader.result;
+      build(); // reconstruiește puzzle-ul cu noua imagine
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // drop imagine peste zona wrap
+  ['dragenter','dragover'].forEach(ev =>
+    dropWrap.addEventListener(ev, e => { e.preventDefault(); }));
+  dropWrap.addEventListener('drop', e => {
+    e.preventDefault();
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Te rog, trage un fișier imagine (jpg/png/webp).');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => { imageUrl = reader.result; build(); };
+    reader.readAsDataURL(file);
+  });
+
+  // shuffle/reset
+  function resetAll(){
+    const cells = board.querySelectorAll('.cell');
+    for (const c of cells) { c.classList.remove('incorrect','success'); c.innerHTML=''; }
+    currentOrder = [...Array(SIZE*SIZE).keys()];
+    shufflePieces();
+    renderPieces();
+    lockedTargets.clear();
+  }
+  shuffleBtn.addEventListener('click', resetAll);
+  resetBtn.addEventListener('click', resetAll);
+
+  // inițializare cu imaginea implicită
+  function loadImageAndBuild(url){
+    const img = new Image();
+    img.onload = () => { imageUrl = url; build(); };
+    img.onerror = () => { console.warn('Imaginea nu s-a putut încărca'); build(); };
+    img.src = url;
+  }
+  loadImageAndBuild(imageUrl);
+})();
+</script>
+</body>
+</html>
