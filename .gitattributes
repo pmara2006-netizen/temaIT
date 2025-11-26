@@ -1,2 +1,29 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Ignoră fișierele Visual Studio
+.vs/
+
+# Ignoră fișierele generate de sistem
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignoră fișierele log
+*.log
+
+# Ignoră fișierele temporare
+*.tmp
+*.swp
+*.swo
+
+# Ignoră fișierele de build / distribuție
+dist/
+build/
+
+# Ignoră node_modules (dacă folosești npm/yarn)
+node_modules/
+
+# Ignoră fișiere cache
+.cache/
+*.bak
+
+# Ignoră fișierele de configurare locale
+.env

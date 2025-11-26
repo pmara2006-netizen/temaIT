@@ -39,6 +39,10 @@
                         <i class="fas fa-info-circle"></i>
                         <span>Despre</span>
                     </a></li>
+                    <li><a href="joc.html" class="menu-link">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>Joc</span>
+                    </a></li>
                     <li>
                       <a href="#" class="menu-link pink-mode-btn" id="theme-toggle">
                         <!-- Keep span empty; CSS ::before will set the correct emoji -->
@@ -345,16 +349,29 @@ function setupEventListeners() {
     document.querySelectorAll('.menu-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (!href || href === '#') return;
-            e.preventDefault();
-            const target = document.querySelector(href);
+            if (!href) return;
+
+            // If it's an in-page anchor (starts with '#'), intercept and smooth-scroll
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (window.innerWidth <= 768) {
+                    const sb = document.querySelector('.phone-sidebar');
+                    if (sb) sb.classList.remove('active');
+                }
+                document.querySelectorAll('.menu-link').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
+
+            // For normal links (like "joc.html") allow default navigation.
+            // Optionally close the sidebar on mobile before navigating:
             if (window.innerWidth <= 768) {
                 const sb = document.querySelector('.phone-sidebar');
                 if (sb) sb.classList.remove('active');
             }
-            document.querySelectorAll('.menu-link').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Do NOT call e.preventDefault(); navigation continues to the new page.
         });
     });
 
@@ -397,6 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePhoneTime();
     setInterval(updatePhoneTime, 60000);
 });
+
 
 // Snowflakes (safe; appends to body)
 function createSnowflake() {
